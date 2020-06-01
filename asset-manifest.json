@@ -1,23 +1,23 @@
 {
   "files": {
-    "main.css": "/SpotifyU/static/css/main.0c6f13dd.chunk.css",
-    "main.js": "/SpotifyU/static/js/main.85f444e7.chunk.js",
-    "main.js.map": "/SpotifyU/static/js/main.85f444e7.chunk.js.map",
+    "main.css": "/SpotifyU/static/css/main.b8c3a783.chunk.css",
+    "main.js": "/SpotifyU/static/js/main.ba7196fb.chunk.js",
+    "main.js.map": "/SpotifyU/static/js/main.ba7196fb.chunk.js.map",
     "runtime-main.js": "/SpotifyU/static/js/runtime-main.05ed6356.js",
     "runtime-main.js.map": "/SpotifyU/static/js/runtime-main.05ed6356.js.map",
-    "static/js/2.9b93141b.chunk.js": "/SpotifyU/static/js/2.9b93141b.chunk.js",
-    "static/js/2.9b93141b.chunk.js.map": "/SpotifyU/static/js/2.9b93141b.chunk.js.map",
+    "static/js/2.60b11d6c.chunk.js": "/SpotifyU/static/js/2.60b11d6c.chunk.js",
+    "static/js/2.60b11d6c.chunk.js.map": "/SpotifyU/static/js/2.60b11d6c.chunk.js.map",
     "index.html": "/SpotifyU/index.html",
-    "precache-manifest.b2d30781e245b65e13fc9e38b6f21c64.js": "/SpotifyU/precache-manifest.b2d30781e245b65e13fc9e38b6f21c64.js",
+    "precache-manifest.0b52ec95dfff784ea6d5d7453c341687.js": "/SpotifyU/precache-manifest.0b52ec95dfff784ea6d5d7453c341687.js",
     "service-worker.js": "/SpotifyU/service-worker.js",
-    "static/css/main.0c6f13dd.chunk.css.map": "/SpotifyU/static/css/main.0c6f13dd.chunk.css.map",
-    "static/js/2.9b93141b.chunk.js.LICENSE.txt": "/SpotifyU/static/js/2.9b93141b.chunk.js.LICENSE.txt",
+    "static/css/main.b8c3a783.chunk.css.map": "/SpotifyU/static/css/main.b8c3a783.chunk.css.map",
+    "static/js/2.60b11d6c.chunk.js.LICENSE.txt": "/SpotifyU/static/js/2.60b11d6c.chunk.js.LICENSE.txt",
     "static/media/logo.svg": "/SpotifyU/static/media/logo.5d5d9eef.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.05ed6356.js",
-    "static/js/2.9b93141b.chunk.js",
-    "static/css/main.0c6f13dd.chunk.css",
-    "static/js/main.85f444e7.chunk.js"
+    "static/js/2.60b11d6c.chunk.js",
+    "static/css/main.b8c3a783.chunk.css",
+    "static/js/main.ba7196fb.chunk.js"
   ]
 }
