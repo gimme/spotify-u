@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "750939cc2ec6f56c3289227fede6b4f5",
+    "revision": "fe9aa87f6dde0e83b8a2b72b01bb4c96",
     "url": "/SpotifyU/index.html"
   },
   {
-    "revision": "d3f0c23729583fe8e58d",
+    "revision": "1f97230a01181721287d",
     "url": "/SpotifyU/static/css/main.0c6f13dd.chunk.css"
   },
   {
-    "revision": "3ca542bf9344843befd5",
-    "url": "/SpotifyU/static/js/2.9b93141b.chunk.js"
+    "revision": "2a863cba2c25394262db",
+    "url": "/SpotifyU/static/js/2.63f3d437.chunk.js"
   },
   {
-    "revision": "e88a3e95b5364d46e95b35ae8c0dc27d",
-    "url": "/SpotifyU/static/js/2.9b93141b.chunk.js.LICENSE.txt"
+    "revision": "3635e2c947bdcc4d684587a6eee5e2c2",
+    "url": "/SpotifyU/static/js/2.63f3d437.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "d3f0c23729583fe8e58d",
-    "url": "/SpotifyU/static/js/main.2b7c0f23.chunk.js"
+    "revision": "1f97230a01181721287d",
+    "url": "/SpotifyU/static/js/main.242c48ab.chunk.js"
   },
   {
     "revision": "26d30fa9abd8e7977320",
