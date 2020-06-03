@@ -1,27 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { getSong } from "./SpotifyAPI/SpotifyAccess";
 import logo from "./logo.svg";
 import "./App.css";
+import { validateAccessToken } from "./SpotifyAPI/AuthService";
 
 function MainPage() {
   const [count, setCount] = useState(0);
+  const [song, setSong] = useState(null);
+
+  useEffect(() => {
+    validateAccessToken();
+  }, []);
 
   const increment = () => {
     setCount(count + 1);
   };
 
-  const sayHello = () => {
-    console.log("Authorized!");
+  const getCurrentlyPlayingSong = () => {
+    getSong().then((result) => {
+      setSong(result);
+    });
   };
+
   return (
     <div className="App">
       <img src={logo} className="App-logo" alt="logo" />
       <p />
 
-      <a href="http://localhost:8888">
-        <button>Login With Spotify</button>
-      </a>
+      <button onClick={getCurrentlyPlayingSong}>Show Current Song</button>
 
-      <button onClick={sayHello}>Authorizee</button>
+      <h1>{song ? song : "-No song is currently playing-"}</h1>
 
       <button onClick={increment}>Increment</button>
 

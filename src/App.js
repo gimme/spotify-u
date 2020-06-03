@@ -1,31 +1,20 @@
 import React from "react";
 import MainPage from "./MainPage";
-import { authenticate } from "./Services/AuthService";
-import PrivateRoute from "./PrivateRoute";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  browserHistory,
-  hashHistory,
-} from "react-router-dom";
+import { validateAccessToken } from "./SpotifyAPI/AuthService";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./App.css";
-
-let history =
-  process.env.NODE_ENV === "production" ? "browserHistory" : "hashHistory";
 
 function App() {
   return (
-    <Router basename={process.env.PUBLIC_URL} history={history}>
+    <Router basename={process.env.PUBLIC_URL}>
       <div className="App">
         <Switch>
-          <Route path="/home" exact component={MainPage} />
           <Route path="/" exact component={MainPage} />
           <Route
-            path="/a"
+            path="/auth"
             exact
             component={() => {
-              authenticate();
+              validateAccessToken();
               return null;
             }}
           />
