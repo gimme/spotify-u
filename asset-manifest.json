@@ -1,23 +1,23 @@
 {
   "files": {
     "main.css": "/SpotifyU/static/css/main.b8c3a783.chunk.css",
-    "main.js": "/SpotifyU/static/js/main.52d0cf73.chunk.js",
-    "main.js.map": "/SpotifyU/static/js/main.52d0cf73.chunk.js.map",
+    "main.js": "/SpotifyU/static/js/main.4d17000b.chunk.js",
+    "main.js.map": "/SpotifyU/static/js/main.4d17000b.chunk.js.map",
     "runtime-main.js": "/SpotifyU/static/js/runtime-main.05ed6356.js",
     "runtime-main.js.map": "/SpotifyU/static/js/runtime-main.05ed6356.js.map",
-    "static/js/2.aa9c0916.chunk.js": "/SpotifyU/static/js/2.aa9c0916.chunk.js",
-    "static/js/2.aa9c0916.chunk.js.map": "/SpotifyU/static/js/2.aa9c0916.chunk.js.map",
+    "static/js/2.68aaed33.chunk.js": "/SpotifyU/static/js/2.68aaed33.chunk.js",
+    "static/js/2.68aaed33.chunk.js.map": "/SpotifyU/static/js/2.68aaed33.chunk.js.map",
     "index.html": "/SpotifyU/index.html",
-    "precache-manifest.6a32bb827c533efd947bc51b00e390bc.js": "/SpotifyU/precache-manifest.6a32bb827c533efd947bc51b00e390bc.js",
+    "precache-manifest.4f56dd2c105b2f3f5c3343250ce1f097.js": "/SpotifyU/precache-manifest.4f56dd2c105b2f3f5c3343250ce1f097.js",
     "service-worker.js": "/SpotifyU/service-worker.js",
     "static/css/main.b8c3a783.chunk.css.map": "/SpotifyU/static/css/main.b8c3a783.chunk.css.map",
-    "static/js/2.aa9c0916.chunk.js.LICENSE.txt": "/SpotifyU/static/js/2.aa9c0916.chunk.js.LICENSE.txt",
+    "static/js/2.68aaed33.chunk.js.LICENSE.txt": "/SpotifyU/static/js/2.68aaed33.chunk.js.LICENSE.txt",
     "static/media/logo.svg": "/SpotifyU/static/media/logo.5d5d9eef.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.05ed6356.js",
-    "static/js/2.aa9c0916.chunk.js",
+    "static/js/2.68aaed33.chunk.js",
     "static/css/main.b8c3a783.chunk.css",
-    "static/js/main.52d0cf73.chunk.js"
+    "static/js/main.4d17000b.chunk.js"
   ]
 }
