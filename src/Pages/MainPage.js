@@ -1,22 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { getSong } from "./SpotifyAPI/SpotifyAccess";
-import logo from "./logo.svg";
-import "./App.css";
-import { validateAccessToken } from "./SpotifyAPI/AuthService";
+import { getSong } from "../SpotifyAPI/SpotifyAccess";
+import logo from "../logo.svg";
+import "../App.css";
 
 function MainPage() {
   const [count, setCount] = useState(0);
   const [song, setSong] = useState(null);
 
   useEffect(() => {
-    validateAccessToken();
+    setCurrentlyPlayingSong();
   }, []);
 
   const increment = () => {
     setCount(count + 1);
   };
 
-  const getCurrentlyPlayingSong = () => {
+  const setCurrentlyPlayingSong = () => {
     getSong().then((result) => {
       setSong(result);
     });
@@ -27,11 +26,11 @@ function MainPage() {
       <img src={logo} className="App-logo" alt="logo" />
       <p />
 
-      <button onClick={getCurrentlyPlayingSong}>Show Current Song</button>
+      <button onClick={setCurrentlyPlayingSong}>Show Current Song</button>
 
       <h1>{song ? song : "-No song is currently playing-"}</h1>
 
-      <button onClick={increment}>Increment</button>
+      <button onClick={increment}>Increment (test)</button>
 
       <h1>{count}</h1>
     </div>

@@ -1,15 +1,11 @@
-import {
-  invalidateAccessTokenCookie,
-  validateAccessToken,
-  accessToken,
-} from "./AuthService";
+import { fetchAccessToken, invalidateAccessToken } from "./AuthService";
 
 /**
  * Returns the currently playing song, or null.
  */
 export const getSong = () => {
-  let promise = accessToken();
-  if (promise === null) return null;
+  let promise = fetchAccessToken();
+  if (promise === null) return Promise.resolve(null);
 
   return promise
     .then((token) => {
@@ -26,16 +22,15 @@ export const getSong = () => {
 
 function processResponse(response) {
   const statusCode = response.status;
+  if (statusCode === 204) return Promise.resolve(null);
   const data = response.json();
-  return Promise.all([statusCode, data])
-    .then(([statusCode, data]) => {
-      if (statusCode === 401) {
-        // Invalid access token
-        invalidateAccessTokenCookie();
-        validateAccessToken();
-      }
+  return Promise.all([statusCode, data]).then(([statusCode, data]) => {
+    if (statusCode === 401) {
+      // Invalid access token
+      invalidateAccessToken();
+      return null;
+    }
 
-      return statusCode === 200 ? data : null;
-    })
-    .catch((error) => {});
+    return statusCode === 200 ? data : null;
+  });
 }
