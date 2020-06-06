@@ -1,24 +1,43 @@
 import { fetchAccessToken, invalidateAccessToken } from "./AuthService";
+import queryString from "query-string";
 
 /**
  * Returns the currently playing song, or null.
  */
 export const getSong = () => {
+  return fetchFromSpotifyAPI("me/player/currently-playing").then((data) => {
+    if (!data) return null;
+    return data.item.name;
+  });
+};
+
+export const getPlaylists = (limit, offset) => {
+  return fetchFromSpotifyAPI("me/playlists", {
+    limit: limit,
+    offset: offset,
+  }).then((data) => {
+    if (!data) return null;
+    return data;
+  });
+};
+
+function fetchFromSpotifyAPI(path, queryParams) {
   let promise = fetchAccessToken();
   if (promise === null) return Promise.resolve(null);
 
   return promise
-    .then((token) => {
-      return fetch("https://api.spotify.com/v1/me/player/currently-playing", {
-        headers: { Authorization: "Bearer " + token },
-      });
+    .then((accessToken) => {
+      return fetch(
+        "https://api.spotify.com/v1/" +
+          path +
+          (queryParams ? "?" + queryString.stringify(queryParams) : ""),
+        {
+          headers: { Authorization: "Bearer " + accessToken },
+        }
+      );
     })
-    .then(processResponse)
-    .then((data) => {
-      if (!data) return null;
-      return data.item.name;
-    });
-};
+    .then(processResponse);
+}
 
 function processResponse(response) {
   const statusCode = response.status;

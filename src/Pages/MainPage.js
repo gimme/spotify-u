@@ -1,18 +1,28 @@
 import React, { useState, useEffect } from "react";
-import { getSong } from "../SpotifyAPI/SpotifyAccess";
+import { withRouter } from "react-router-dom";
+import { getSong, getPlaylists } from "../SpotifyAPI/SpotifyAccess";
 import logo from "../logo.svg";
 import "../App.css";
 
-function MainPage() {
-  const [count, setCount] = useState(0);
+function MainPage(props) {
+  const [count, setCount] = useState(1);
   const [song, setSong] = useState(null);
+  const [playlist, setPlaylist] = useState(null);
 
   useEffect(() => {
     setCurrentlyPlayingSong();
+    setCurrentPlaylist();
   }, []);
 
   const increment = () => {
     setCount(count + 1);
+    setCurrentPlaylist(count);
+  };
+
+  const setCurrentPlaylist = (index) => {
+    getPlaylists(1, index).then((data) => {
+      setPlaylist(data.items[0].name);
+    });
   };
 
   const setCurrentlyPlayingSong = () => {
@@ -32,9 +42,12 @@ function MainPage() {
 
       <button onClick={increment}>Increment (test)</button>
 
-      <h1>{count}</h1>
+      <h1>
+        {count} <br />
+        {playlist ? playlist : "-"}
+      </h1>
     </div>
   );
 }
 
-export default MainPage;
+export default withRouter(MainPage);

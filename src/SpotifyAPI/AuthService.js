@@ -1,9 +1,9 @@
 import queryString from "query-string";
 import Cookies from "universal-cookie";
-import history from "../utils/history";
+import history, { consumeSearchParams } from "../utils/history";
 
-let accessTokenRefreshInterval = 10; // Minutes
-let minDurationBeforeRefresh = 5; // Minutes
+let accessTokenRefreshInterval = 1; // Minutes
+let minDurationBeforeRefresh = 15; // Minutes
 let expirationTime = 60; // Minutes
 
 const overrideUseProductionBackend = true;
@@ -53,7 +53,7 @@ export const fetchAccessToken = () => {
   }
 
   // Parse from address field
-  let parsed = parseAccessToken();
+  let parsed = consumeAccessTokenParams();
   accessToken = parsed.access_token;
   if (!isNullOrEmpty(accessToken)) {
     // Add new cookie with the parsed access token
@@ -110,12 +110,17 @@ function generateNewAccessTokenFromSpotify() {
 /**
  * Returns the access token parsed from the address field.
  */
-function parseAccessToken() {
-  let parsed = queryString.parse(window.location.search);
+function consumeAccessTokenParams() {
+  let { access_token, refresh_token, expires_in, ...rest } = queryString.parse(
+    window.location.search
+  );
+  consumeSearchParams(queryString.stringify(rest));
+  // Remove the hash that is sometimes appended on the callback
+  window.location.hash = window.location.hash.replace("_=_", "");
   return {
-    access_token: parsed.access_token,
-    expires_in: parsed.expires_in,
-    refresh_token: parsed.refresh_token,
+    access_token: access_token,
+    expires_in: expires_in,
+    refresh_token: refresh_token,
   };
 }
 
