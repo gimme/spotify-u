@@ -25,6 +25,7 @@
     "react-scripts": "3.4.1",
     "react-window": "^1.8.5",
     "spotify-web-api-js": "1.4.0",
+    "typescript": "^3.9.5",
     "universal-cookie": "^4.0.3"
   },
   "scripts": {
