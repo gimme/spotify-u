@@ -4,11 +4,13 @@ import { getSong, getPlaylists } from "../spotifyAPI/SpotifyAccess";
 import logo from "../logo.svg";
 import "../App.scss";
 import { Button } from "@material-ui/core";
+import VirtualizedList from "../components/VirtualizedList";
 
 function MainPage(props) {
   const [count, setCount] = useState(1);
   const [song, setSong] = useState(null);
   const [playlist, setPlaylist] = useState(null);
+  const [items, setItems] = useState([{ name: "AAA" }, { name: "BBB" }]);
 
   useEffect(() => {
     setCurrentlyPlayingSong();
@@ -34,6 +36,13 @@ function MainPage(props) {
 
   return (
     <div>
+      <VirtualizedList
+        items={items}
+        onItemSelected={(item, index) =>
+          console.log("Selected item:", item.name)
+        }
+      />
+
       <img src={logo} className="App-logo" alt="logo" />
       <p />
 
