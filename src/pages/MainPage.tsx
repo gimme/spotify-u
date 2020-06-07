@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { withRouter } from "react-router-dom";
 import { getSong, getPlaylists } from "../spotifyAPI/SpotifyAccess";
 import logo from "../logo.svg";
 import "../App.scss";
 import { Button } from "@material-ui/core";
 import VirtualizedList from "../components/VirtualizedList";
 
-function MainPage(props) {
+function MainPage() {
   const [count, setCount] = useState(1);
   const [song, setSong] = useState(null);
   const [playlist, setPlaylist] = useState(null);
-  const [items, setItems] = useState([{ title: "AAA" }, { title: "BBB" }]);
+  const [items, setItems] = useState([{ text: "AAA" }, { text: "BBB" }]);
 
   useEffect(() => {
     setCurrentlyPlayingSong();
-    setCurrentPlaylist();
+    setCurrentPlaylist(0);
   }, []);
 
   const increment = () => {
@@ -22,9 +21,9 @@ function MainPage(props) {
     setCurrentPlaylist(count);
   };
 
-  const setCurrentPlaylist = (index) => {
+  const setCurrentPlaylist = (index: number) => {
     getPlaylists(1, index).then((data) => {
-      setPlaylist(data.items[0].title);
+      setPlaylist(data.items[0].name);
     });
   };
 
@@ -39,7 +38,7 @@ function MainPage(props) {
       <VirtualizedList
         items={items}
         onItemSelected={(item, index) =>
-          console.log("Selected item:", item.title)
+          console.log("Selected item:", item.text)
         }
       />
 
@@ -68,4 +67,4 @@ function MainPage(props) {
   );
 }
 
-export default withRouter(MainPage);
+export default MainPage;

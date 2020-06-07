@@ -4,10 +4,10 @@ import { Button } from "@material-ui/core";
 import VirtualizedList from "../components/VirtualizedList";
 
 function TestPage() {
-  const [items, setItems] = useState([{ title: "AAA" }, { title: "BBB" }]);
+  const [items, setItems] = useState([{ text: "AAA" }, { text: "BBB" }]);
 
   const addItem = () => {
-    setItems((items) => [...items, { title: "CCC" + (items.length + 1) }]);
+    setItems((items) => [...items, { text: "CCC" + (items.length + 1) }]);
     console.log("added CCC " + (items.length + 1));
   };
 
@@ -20,7 +20,7 @@ function TestPage() {
       <VirtualizedList
         items={items}
         onItemSelected={(item, index) =>
-          console.log("Selected item:", item.title)
+          console.log("Selected item:", item.text)
         }
       />
     </div>

@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface Item {
-  title: string;
+  text: string;
 }
 
 interface RowProps {
@@ -42,15 +42,15 @@ function renderRow(props: RowProps) {
         if (props.data.onItemClick) props.data.onItemClick(item, index);
       }}
     >
-      <ListItemText primary={item.title} />
+      <ListItemText primary={item.text} />
     </ListItem>
   );
 }
 
 interface Props {
-  onItemClick: (item: Item, index: number) => void;
-  onItemSelected: (item: Item, index: number) => void;
   items: Item[];
+  onItemSelected: (item: Item, index: number) => void;
+  onItemClick?: (item: Item, index: number) => void;
 }
 
 function VirtualizedList(props: Props) {
