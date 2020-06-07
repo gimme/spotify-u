@@ -23,7 +23,7 @@ const cookies = new Cookies();
 /**
  * Starts an task to refresh the Spotify access token every 10 minutes;
  */
-export const startAccessTokenRefreshInterval = () => {
+export const startAccessTokenRefreshInterval = (): void => {
   refreshAccessToken();
   window.setInterval(() => {
     refreshAccessToken();
@@ -33,7 +33,7 @@ export const startAccessTokenRefreshInterval = () => {
 /**
  * Fetches a new access token from Spotify.
  */
-export const validateAccessToken = () => {
+export const validateAccessToken = (): void => {
   fetchAccessToken();
 };
 
@@ -45,9 +45,9 @@ export const validateAccessToken = () => {
  * 2. Parse from address field
  * 3. Generate new from Spotify
  */
-export const fetchAccessToken = () => {
+export const fetchAccessToken = (): Promise<string> | null => {
   // Get from cookie
-  let accessToken = cookies.get(accessTokenKey);
+  let accessToken: string = cookies.get(accessTokenKey);
   if (accessToken !== undefined) {
     return Promise.resolve(accessToken);
   }
@@ -69,7 +69,7 @@ export const fetchAccessToken = () => {
 /**
  * Generate new access token from Spotify.
  */
-export const invalidateAccessToken = () => {
+export const invalidateAccessToken = (): void => {
   cookies.remove(accessTokenKey);
   generateNewAccessTokenFromSpotify();
 };
@@ -79,38 +79,43 @@ export const invalidateAccessToken = () => {
  * Returns a promise of with the refreshed access token (the same access token
  * that the refresh token was originally generated for).
  */
-export const refreshAccessToken = () => {
+export const refreshAccessToken = (): void => {
   // Don't refresh again if done recently
   if (cookies.get(recentRefreshKey) !== undefined) return;
 
   let refreshToken = cookies.get(refreshTokenKey);
-  if (refreshToken === undefined) return null;
+  if (refreshToken === undefined) return;
 
   console.log("Refreshing access token...");
 
-  return fetch(refresh_token_uri + "?refresh_token=" + refreshToken)
+  fetch(refresh_token_uri + "?refresh_token=" + refreshToken)
     .then((response) => response.json())
     .then((data) => {
       console.log("Refreshed access token");
 
       let accessToken = data.access_token;
       updateTokenCookies(accessToken, refreshToken);
-      return accessToken;
     });
 };
 
 /**
  * Generates a new access token by redirecting to Spotify's authentication page.
  */
-function generateNewAccessTokenFromSpotify() {
+function generateNewAccessTokenFromSpotify(): void {
   history.push("/loading");
   window.location.replace(authentication_uri);
+}
+
+interface AccessTokenParams {
+  access_token: string;
+  expires_in: number;
+  refresh_token: string;
 }
 
 /**
  * Returns the access token parsed from the address field.
  */
-function consumeAccessTokenParams() {
+function consumeAccessTokenParams(): AccessTokenParams {
   let { access_token, refresh_token, expires_in, ...rest } = queryString.parse(
     window.location.search
   );
@@ -118,19 +123,19 @@ function consumeAccessTokenParams() {
   // Remove the hash that is sometimes appended on the callback
   window.location.hash = window.location.hash.replace("_=_", "");
   return {
-    access_token: access_token,
-    expires_in: expires_in,
-    refresh_token: refresh_token,
+    access_token: access_token as string,
+    expires_in: (expires_in as unknown) as number,
+    refresh_token: refresh_token as string,
   };
 }
 
 /**
  * Updates the access/refresh token values stored in the cookies.
  *
- * @param {string} accessToken The access token value to set
- * @param {string} refreshToken The refresh token value to set
+ * @param accessToken The access token value to set
+ * @param refreshToken The refresh token value to set
  */
-function updateTokenCookies(accessToken, refreshToken) {
+function updateTokenCookies(accessToken: string, refreshToken: string): void {
   cookies.set(accessTokenKey, accessToken, {
     path: "/",
     maxAge: expirationTime * 60,
@@ -148,8 +153,8 @@ function updateTokenCookies(accessToken, refreshToken) {
 /**
  * Returns if the specified string is undefined, null or empty.
  *
- * @param {string} string The string to check
+ * @param string The string to check
  */
-function isNullOrEmpty(string) {
+function isNullOrEmpty(string: string): boolean {
   return string === undefined || string === null || string === "";
 }

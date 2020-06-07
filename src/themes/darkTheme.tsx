@@ -15,9 +15,6 @@ const darkTheme = createMuiTheme({
     primary: lightBlue,
     secondary: green,
   },
-  status: {
-    danger: "orange",
-  },
 });
 
 export default darkTheme;

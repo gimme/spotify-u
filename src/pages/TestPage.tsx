@@ -3,7 +3,7 @@ import "../App.scss";
 import { Button } from "@material-ui/core";
 import VirtualizedList from "../components/VirtualizedList";
 
-function TestPage() {
+const TestPage: React.FC = () => {
   const [items, setItems] = useState([{ text: "AAA" }, { text: "BBB" }]);
 
   const addItem = () => {
@@ -25,6 +25,6 @@ function TestPage() {
       />
     </div>
   );
-}
+};
 
 export default TestPage;

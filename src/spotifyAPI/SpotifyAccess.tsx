@@ -4,14 +4,28 @@ import queryString from "query-string";
 /**
  * Returns the currently playing song, or null.
  */
-export const getSong = () => {
+export const getSong = (): Promise<string | null> => {
   return fetchFromSpotifyAPI("me/player/currently-playing").then((data) => {
     if (!data) return null;
     return data.item.name;
   });
 };
 
-export const getPlaylists = (limit, offset) => {
+interface Playlist {
+  name: string;
+}
+
+/**
+ * Get a list of the playlists owned or followed by the Spotify user.
+ *
+ * @param limit The maximum number of playlists to return. Default: 20. Minimum: 1. Maximum: 50.
+ * @param offset The index of the first playlist to return. Default: 0 (the first object).
+ * Maximum offset: 100.000. Use with limit to get the next set of playlists.
+ */
+export const getPlaylists = (
+  limit?: number,
+  offset?: number
+): Promise<{ items: Playlist[] } | null> => {
   return fetchFromSpotifyAPI("me/playlists", {
     limit: limit,
     offset: offset,
@@ -21,7 +35,10 @@ export const getPlaylists = (limit, offset) => {
   });
 };
 
-function fetchFromSpotifyAPI(path, queryParams) {
+function fetchFromSpotifyAPI(
+  path: string,
+  queryParams?: object
+): Promise<any | null> {
   let promise = fetchAccessToken();
   if (promise === null) return Promise.resolve(null);
 
@@ -39,7 +56,10 @@ function fetchFromSpotifyAPI(path, queryParams) {
     .then(processResponse);
 }
 
-function processResponse(response) {
+function processResponse(response: {
+  status: any;
+  json: () => any;
+}): Promise<any | null> {
   const statusCode = response.status;
   if (statusCode === 204) return Promise.resolve(null);
   const data = response.json();
