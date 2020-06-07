@@ -10,7 +10,7 @@ function MainPage(props) {
   const [count, setCount] = useState(1);
   const [song, setSong] = useState(null);
   const [playlist, setPlaylist] = useState(null);
-  const [items, setItems] = useState([{ name: "AAA" }, { name: "BBB" }]);
+  const [items, setItems] = useState([{ title: "AAA" }, { title: "BBB" }]);
 
   useEffect(() => {
     setCurrentlyPlayingSong();
@@ -24,7 +24,7 @@ function MainPage(props) {
 
   const setCurrentPlaylist = (index) => {
     getPlaylists(1, index).then((data) => {
-      setPlaylist(data.items[0].name);
+      setPlaylist(data.items[0].title);
     });
   };
 
@@ -39,7 +39,7 @@ function MainPage(props) {
       <VirtualizedList
         items={items}
         onItemSelected={(item, index) =>
-          console.log("Selected item:", item.name)
+          console.log("Selected item:", item.title)
         }
       />
 

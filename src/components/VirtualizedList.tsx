@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import "../App.scss";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import { FixedSizeList } from "react-window";
 
@@ -11,12 +10,25 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     height: 400,
     maxWidth: 300,
-    //backgroundColor: theme.palette.background.paper,
-    backgroundColor: theme.palette.grey.A400, //"#ffffff08",
+    backgroundColor: theme.palette.grey[900],
   },
 }));
 
-function renderRow(props) {
+interface Item {
+  title: string;
+}
+
+interface RowProps {
+  index: number;
+  style: React.CSSProperties | undefined;
+  data: {
+    selectedIndex: number;
+    onItemClick: (item: Item, index: number) => void;
+    items: Item[];
+  };
+}
+
+function renderRow(props: RowProps) {
   const { index, style } = props;
   const item = props.data.items[index];
 
@@ -30,21 +42,22 @@ function renderRow(props) {
         if (props.data.onItemClick) props.data.onItemClick(item, index);
       }}
     >
-      <ListItemText primary={item.name} />
+      <ListItemText primary={item.title} />
     </ListItem>
   );
 }
 
-renderRow.propTypes = {
-  index: PropTypes.number.isRequired,
-  style: PropTypes.object.isRequired,
-};
+interface Props {
+  onItemClick: (item: Item, index: number) => void;
+  onItemSelected: (item: Item, index: number) => void;
+  items: Item[];
+}
 
-function VirtualizedList(props) {
+function VirtualizedList(props: Props) {
   const classes = useStyles();
-  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
-  const onItemClick = (item, index) => {
+  const onItemClick = (item: Item, index: number) => {
     let alreadySelected = index === selectedIndex;
     setSelectedIndex(index);
     if (props.onItemClick) props.onItemClick(item, index);
