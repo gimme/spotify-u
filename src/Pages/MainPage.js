@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { withRouter } from "react-router-dom";
-import { getSong, getPlaylists } from "../SpotifyAPI/SpotifyAccess";
+import { getSong, getPlaylists } from "../spotifyAPI/SpotifyAccess";
 import logo from "../logo.svg";
-import "../App.css";
+import "../App.scss";
+import { Button } from "@material-ui/core";
 
 function MainPage(props) {
   const [count, setCount] = useState(1);
@@ -32,15 +33,23 @@ function MainPage(props) {
   };
 
   return (
-    <div className="App">
+    <div>
       <img src={logo} className="App-logo" alt="logo" />
       <p />
 
-      <button onClick={setCurrentlyPlayingSong}>Show Current Song</button>
+      <Button
+        color="primary"
+        variant="outlined"
+        onClick={setCurrentlyPlayingSong}
+      >
+        Show Current Song
+      </Button>
 
       <h1>{song ? song : "-No song is currently playing-"}</h1>
 
-      <button onClick={increment}>Increment (test)</button>
+      <Button color="primary" variant="outlined" onClick={increment}>
+        Increment (test)
+      </Button>
 
       <h1>
         {count} <br />
