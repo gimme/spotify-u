@@ -6,7 +6,7 @@ import queryString from "query-string";
  */
 export const getSong = (): Promise<string | null> => {
   return fetchFromSpotifyAPI("me/player/currently-playing").then((data) => {
-    if (!data) return null;
+    if (!data || !data.item) return null;
     return data.item.name;
   });
 };
