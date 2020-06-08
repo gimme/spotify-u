@@ -5,7 +5,7 @@ import "../App.scss";
 import { Button } from "@material-ui/core";
 import VirtualizedList from "../components/VirtualizedList";
 import { makeStyles } from "@material-ui/core/styles";
-import Box from "@material-ui/core/Box";
+import Divider from "@material-ui/core/Divider";
 import Paper from "@material-ui/core/Paper";
 import Playlist from "../interfaces/Playlist";
 
@@ -18,7 +18,12 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
   },
   header: {
-    minHeight: 400,
+    width: "100%",
+    justifyContent: "center",
+    paddingTop: theme.spacing(3),
+  },
+  content: {
+    paddingTop: theme.spacing(3),
   },
   sideBar: {
     width: "100%",
@@ -67,29 +72,39 @@ const MainPage: React.FC = () => {
         </Paper>
       </div>
 
-      <div className={classes.app}>
-        <Box className={classes.header}>
-          {playlist ? (
-            <div>
-              <img height={300} src={playlist.images[0].url} />
-              <h1>{playlist.name}</h1>
-            </div>
-          ) : (
-            <img src={logo} className="App-logo" alt="logo" />
-          )}
-          <p />
-        </Box>
+      {playlist ? (
+        <div className={classes.app}>
+          <div className={classes.header}>
+            {playlist ? (
+              <div>
+                <img height={300} src={playlist.images[0].url} />
+                <h1>{playlist.name}</h1>
+              </div>
+            ) : (
+              <img src={logo} className="App-logo" alt="logo" />
+            )}
+            <p />
+          </div>
 
-        <Button
-          color="primary"
-          variant="outlined"
-          onClick={setCurrentlyPlayingSong}
-        >
-          Show Current Song
-        </Button>
+          <Divider variant="middle" />
 
-        <h1>{song ? song : "-No song is currently playing-"}</h1>
-      </div>
+          <div className={classes.content}>
+            <Button
+              color="primary"
+              variant="outlined"
+              onClick={setCurrentlyPlayingSong}
+            >
+              Show Current Song
+            </Button>
+
+            <h1>{song ? song : "-No song is currently playing-"}</h1>
+          </div>
+        </div>
+      ) : (
+        <div className={classes.header}>
+          <h1>Select a playlist</h1>
+        </div>
+      )}
       <div className={classes.sideBar} />
     </div>
   );
