@@ -4,10 +4,10 @@ import { Button } from "@material-ui/core";
 import VirtualizedList from "../components/VirtualizedList";
 
 const TestPage: React.FC = () => {
-  const [items, setItems] = useState([{ text: "AAA" }, { text: "BBB" }]);
+  const [items, setItems] = useState([{ name: "AAA" }, { name: "BBB" }]);
 
   const addItem = () => {
-    setItems((items) => [...items, { text: "CCC" + (items.length + 1) }]);
+    setItems((items) => [...items, { name: "CCC" + (items.length + 1) }]);
     console.log("added CCC " + (items.length + 1));
   };
 
@@ -18,9 +18,11 @@ const TestPage: React.FC = () => {
         Add Item
       </Button>
       <VirtualizedList
+        height={400}
+        itemSize={46}
         items={items}
         onItemSelected={(item, index) =>
-          console.log("Selected item:", item.text)
+          console.log("Selected item:", item.name)
         }
       />
     </div>
