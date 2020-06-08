@@ -1,5 +1,6 @@
 import { fetchAccessToken, invalidateAccessToken } from "./AuthService";
 import queryString from "query-string";
+import Playlist from "../interfaces/Playlist";
 
 /**
  * Returns the currently playing song, or null.
@@ -10,10 +11,6 @@ export const getSong = (): Promise<string | null> => {
     return data.item.name;
   });
 };
-
-interface Playlist {
-  name: string;
-}
 
 /**
  * Get a list of the playlists owned or followed by the Spotify user.

@@ -1,3 +1,29 @@
+/* width */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #00000000;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #535353;
+  border-radius: 100px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #b3b3b3;
+}
+
+/* Corner */
+::-webkit-scrollbar-corner {
+  background: #00000000;
+}
+
 .outerWrap {
   height: 100vh;
   min-height: 100%;

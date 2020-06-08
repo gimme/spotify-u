@@ -8,17 +8,18 @@ interface Item {
   name: string;
 }
 
-interface RowProps {
+interface RowProps<T> {
   index: number;
   style: React.CSSProperties | undefined;
   data: {
     selectedIndex: number;
-    onItemClick: (item: Item, index: number) => void;
-    items: Item[];
+    onItemClick: (item: T, index: number) => void;
+    items: T[];
+    getText(t: T): string;
   };
 }
 
-function renderRow(props: RowProps) {
+function renderRow<T>(props: RowProps<T>) {
   const { index, style } = props;
   const item = props.data.items[index];
 
@@ -32,23 +33,27 @@ function renderRow(props: RowProps) {
         if (props.data.onItemClick) props.data.onItemClick(item, index);
       }}
     >
-      <ListItemText primary={item.name} />
+      <ListItemText
+        primaryTypographyProps={{ noWrap: true }}
+        primary={props.data.getText(item)}
+      />
     </ListItem>
   );
 }
 
-interface Props {
+interface Props<T> {
   height: number;
   itemSize: number;
-  items: Item[];
-  onItemSelected: (item: Item, index: number) => void;
-  onItemClick?: (item: Item, index: number) => void;
+  items: T[];
+  getText(t: T): string;
+  onItemSelected: (item: T, index: number) => void;
+  onItemClick?: (item: T, index: number) => void;
 }
 
-const VirtualizedList: React.FC<Props> = (props) => {
+function VirtualizedList<T>(props: Props<T>) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
-  const onItemClick = (item: Item, index: number) => {
+  const onItemClick = (item: T, index: number) => {
     let alreadySelected = index === selectedIndex;
     setSelectedIndex(index);
     if (props.onItemClick) props.onItemClick(item, index);
@@ -60,6 +65,7 @@ const VirtualizedList: React.FC<Props> = (props) => {
     selectedIndex: selectedIndex,
     onItemClick: onItemClick,
     items: props.items,
+    getText: props.getText,
   };
 
   return (
@@ -75,6 +81,6 @@ const VirtualizedList: React.FC<Props> = (props) => {
       </FixedSizeList>
     </div>
   );
-};
+}
 
 export default VirtualizedList;

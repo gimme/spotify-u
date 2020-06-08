@@ -21,8 +21,9 @@ const TestPage: React.FC = () => {
         height={400}
         itemSize={46}
         items={items}
-        onItemSelected={(item, index) =>
-          console.log("Selected item:", item.name)
+        getText={(item: { name: string }) => item.name}
+        onItemSelected={(playlist, index) =>
+          console.log("Selected item:", playlist.name)
         }
       />
     </div>
