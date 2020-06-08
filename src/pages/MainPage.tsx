@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getSong, getPlaylists } from "../spotifyAPI/SpotifyAccess";
+import { getSong, getPlaylists, getUserId } from "../spotifyAPI/SpotifyAccess";
 import logo from "../logo.svg";
 import "../App.scss";
 import { Button } from "@material-ui/core";
@@ -43,9 +43,13 @@ const MainPage: React.FC = () => {
   const [playlists, setPlaylists] = useState<Playlist[]>([]);
 
   useEffect(() => {
-    getPlaylists(20, 0).then((data) => {
-      if (!data) return;
-      setPlaylists(data.items);
+    getUserId().then((userId) => {
+      getPlaylists(50, 0).then((data) => {
+        if (!data) return;
+        setPlaylists(
+          data.items.filter((playlist) => playlist.owner.id === userId)
+        );
+      });
     });
     setCurrentlyPlayingSong();
   }, []);
@@ -67,6 +71,7 @@ const MainPage: React.FC = () => {
             getText={(playlist: Playlist) => playlist.name}
             onItemSelected={(playlist, index) => {
               setPlaylist(playlist);
+              console.log(playlist);
             }}
           />
         </Paper>

@@ -2,6 +2,13 @@ import { fetchAccessToken, invalidateAccessToken } from "./AuthService";
 import queryString from "query-string";
 import Playlist from "../interfaces/Playlist";
 
+export const getUserId = (): Promise<string | null> => {
+  return fetchFromSpotifyAPI("me").then((data) => {
+    if (!data) return null;
+    return data.id;
+  });
+};
+
 /**
  * Returns the currently playing song, or null.
  */
