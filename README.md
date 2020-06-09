@@ -12,6 +12,14 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.<br />
 You will also see any lint errors in the console.
 
+The app will automatically redirect to the public GitHub Pages url after the first authentication. To solve this you have to go back to http://localhost:3000 for one more authentication. Then, on the second redirect, the url will 
+include a long access token string. Append the whole string (including "?access_token=") to http://localhost:3000/ and you should be good to go.
+
+### `yarn run deploy`
+
+Deploys the app to GitHub Pages.<br />
+Run this after each major update.
+
 ### `yarn test`
 
 Launches the test runner in the interactive watch mode.<br />
