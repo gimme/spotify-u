@@ -5,6 +5,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import { FixedSizeList } from "react-window";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { Box } from "@material-ui/core";
+import Delayed from "./Delayed";
 
 interface RowProps<T> {
   index: number;
@@ -30,7 +31,9 @@ function renderRow<T>(props: RowProps<T>) {
     content = (
       <ListItem style={{ height: 56 }} key={index}>
         <Box justifyContent="center" width="100%" display="flex">
-          <CircularProgress size={40} />
+          <Delayed wait={500}>
+            <CircularProgress />
+          </Delayed>
         </Box>
       </ListItem>
     );
