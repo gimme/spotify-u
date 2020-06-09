@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getPlaylists, getUserId } from "../spotifyAPI/SpotifyAccess";
 import "../App.scss";
-import InfiniteLoaderList from "../components/InfiniteLoaderList";
+import InfiniteLoaderList from "./utils/InfiniteLoaderList";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Playlist from "../interfaces/Playlist";
@@ -75,7 +75,7 @@ const Playlists: React.FC<Props> = (props) => {
       <InfiniteLoaderList
         hasNextPage={hasNextPage}
         isNextPageLoading={isNextPageLoading}
-        height={600}
+        height={784}
         itemSize={46}
         items={playlists}
         getText={(playlist: Playlist) => playlist.name}
