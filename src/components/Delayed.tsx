@@ -11,9 +11,12 @@ const Delayed: React.FC<Props> = (props) => {
   const [hidden, setHidden] = useState<boolean>(true);
 
   useEffect(() => {
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       setHidden(false);
     }, props.wait);
+    return () => {
+      clearTimeout(timeout);
+    };
   }, []);
 
   return hidden ? null : <>{props.children}</>;
