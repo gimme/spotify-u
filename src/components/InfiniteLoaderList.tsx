@@ -7,43 +7,61 @@ const loadingItems: (boolean | undefined)[] = [];
 interface Props<T> {
   height: number;
   itemSize: number;
-  items: (T | null)[];
+  hasNextPage: boolean;
+  isNextPageLoading: boolean;
+  items: T[];
   getText: (item: T) => string;
-  loadItems: (index: number) => Promise<any>;
+  loadNextPage: (index: number) => Promise<any>;
   onItemSelected?: (item: T, index: number) => void;
   onItemClick?: (item: T, index: number) => void;
 }
 
 function InfiniteLoaderList<T>(props: Props<T>) {
-  const isItemLoaded = (index: number) => !!props.items[index];
+  //const isItemLoaded = (index: number) => !!props.items[index];
 
-  const loadMoreItems = (
+  /*const loadMoreItems = (
     startIndex: number,
     stopIndex: number
   ): Promise<any> => {
     if (loadingItems[startIndex]) return Promise.resolve();
     loadingItems[startIndex] = true;
     return props.loadItems(startIndex);
-  };
+  };*/
 
-  function getText(item: T | null): string {
-    return item ? props.getText(item) : "Loading...";
+  // If there are more items to be loaded then add an extra row to hold a loading indicator.
+  const itemCount = props.hasNextPage
+    ? props.items.length + 1
+    : props.items.length;
+
+  // Only load 1 page of items at a time.
+  // Pass an empty callback to InfiniteLoader in case it asks us to load more than once.
+  const loadMoreItems = props.isNextPageLoading
+    ? () => Promise.resolve()
+    : props.loadNextPage;
+
+  // Every row is loaded except for our loading indicator row.
+  const isItemLoaded = (index: number) =>
+    !props.hasNextPage || index < props.items.length;
+
+  function getText(item: T): string {
+    return props.getText(item);
   }
 
   return (
     <InfiniteLoader
       isItemLoaded={isItemLoaded}
-      itemCount={props.items.length}
+      itemCount={itemCount}
       loadMoreItems={loadMoreItems}
     >
       {({ onItemsRendered, ref }) => (
         <VirtualizedList
+          isItemLoaded={isItemLoaded}
           onItemsRendered={onItemsRendered}
           reff={ref}
           height={props.height}
           itemSize={props.itemSize}
           items={props.items}
-          itemCount={props.items.length}
+          itemCount={itemCount}
           getText={getText}
           onItemSelected={props.onItemSelected}
           onItemClick={props.onItemClick}

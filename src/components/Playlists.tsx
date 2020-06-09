@@ -20,20 +20,48 @@ interface Props {
 
 const Playlists: React.FC<Props> = (props) => {
   const classes = useStyles();
-  const [playlists, setPlaylists] = useState<(Playlist | null)[]>([]);
+  const [playlists, setPlaylists] = useState<Playlist[]>([]);
   const [skippedPlaylists, setSkippedPlaylists] = useState<number>(0);
   const [userId, setUserId] = useState<string | null>(null);
+  const [isNextPageLoading, setIsNextPageLoading] = useState<boolean>(false);
+  const [hasNextPage, setHasNextPage] = useState<boolean>(true);
 
   useEffect(() => {
     getUserId().then((userId) => {
       setUserId(userId);
-      setPlaylists((playlists) => [...playlists, null]);
     });
   }, []);
 
-  const loadPlaylists = (index: number): Promise<any> => {
+  const loadMorePlaylists = (index: number): Promise<any> => {
+    setIsNextPageLoading(true);
+    console.log("LOADING MORE PLAYLISTS");
+
+    return new Promise((resolve) =>
+      setTimeout(() => {
+        setIsNextPageLoading(false);
+
+        if (index >= 100) {
+          setHasNextPage(false);
+          return;
+        }
+
+        let arr: Playlist[] = [];
+        for (let i = 0; i < 30; i++) {
+          arr[i] = {
+            name: "LOADED " + (index + i),
+            id: "1",
+            images: [{ height: 1, width: 1, url: "" }],
+            owner: { id: "1" },
+          };
+        }
+        setPlaylists((playlists) => playlists.concat(arr));
+
+        resolve();
+      }, 4000)
+    );
+    return Promise.resolve();
     if (!userId) {
-      setPlaylists((playlists) => playlists.filter((item) => !!item));
+      //setPlaylists((playlists) => playlists.filter((item) => !!item));
       return Promise.resolve();
     }
 
@@ -51,7 +79,7 @@ const Playlists: React.FC<Props> = (props) => {
         skippedPlaylists + data.items.length - filteredData.length
       );
       setPlaylists((playlists) =>
-        playlists.filter((item) => !!item).concat([...filteredData, null])
+        playlists.filter((item) => !!item).concat(filteredData)
       );
     });
   };
@@ -59,13 +87,13 @@ const Playlists: React.FC<Props> = (props) => {
   return (
     <Paper elevation={3} className={classes.root}>
       <InfiniteLoaderList
+        hasNextPage={hasNextPage}
+        isNextPageLoading={isNextPageLoading}
         height={600}
         itemSize={46}
         items={playlists}
-        getText={(playlist: Playlist | null) =>
-          playlist ? playlist.name : "Loading..."
-        }
-        loadItems={loadPlaylists}
+        getText={(playlist: Playlist) => playlist.name}
+        loadNextPage={loadMorePlaylists}
         onItemSelected={props.onPlaylistSelected}
       />
     </Paper>

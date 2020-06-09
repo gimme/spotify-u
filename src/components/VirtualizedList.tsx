@@ -3,6 +3,8 @@ import "../App.scss";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import { FixedSizeList } from "react-window";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { Box } from "@material-ui/core";
 
 interface RowProps<T> {
   index: number;
@@ -10,8 +12,9 @@ interface RowProps<T> {
   data: {
     selectedIndex: number;
     onItemClick: (item: T, index: number) => void;
-    items: (T | null)[];
-    getText: (t: T | null) => string;
+    items: T[];
+    getText: (t: T) => string;
+    isItemLoaded?: (index: number) => boolean;
   };
 }
 
@@ -19,34 +22,51 @@ function renderRow<T>(props: RowProps<T>) {
   const { index, style } = props;
   const item = props.data.items[index];
 
-  return (
-    <ListItem
-      button
-      style={style}
-      key={index}
-      selected={props.data.selectedIndex === index}
-      onClick={() => {
-        if (props.data.onItemClick && item) props.data.onItemClick(item, index);
-      }}
-    >
-      <ListItemText
-        primaryTypographyProps={{ noWrap: true }}
-        primary={props.data.getText(item)}
-      />
-    </ListItem>
-  );
+  const loading: boolean =
+    !!props.data.isItemLoaded && !props.data.isItemLoaded(index);
+
+  let content;
+  if (loading) {
+    content = (
+      <ListItem style={{ height: 56 }} key={index}>
+        <Box justifyContent="center" width="100%" display="flex">
+          <CircularProgress size={40} />
+        </Box>
+      </ListItem>
+    );
+  } else {
+    content = (
+      <ListItem
+        button
+        key={index}
+        selected={props.data.selectedIndex === index}
+        onClick={() => {
+          if (props.data.onItemClick && item)
+            props.data.onItemClick(item, index);
+        }}
+      >
+        <ListItemText
+          primaryTypographyProps={{ noWrap: true }}
+          primary={props.data.getText(item)}
+        />
+      </ListItem>
+    );
+  }
+
+  return <div style={style}>{content}</div>;
 }
 
 interface Props<T> {
   height: number;
   itemSize: number;
-  items: (T | null)[];
-  getText: (item: T | null) => string;
+  items: T[];
+  getText: (item: T) => string;
   itemCount?: number;
   onItemSelected?: (item: T, index: number) => void;
   onItemClick?: (item: T, index: number) => void;
   onItemsRendered?: any;
   reff?: any;
+  isItemLoaded?: (index: number) => boolean;
 }
 
 function VirtualizedList<T>(props: Props<T>) {
@@ -65,6 +85,7 @@ function VirtualizedList<T>(props: Props<T>) {
     onItemClick: onItemClick,
     items: props.items,
     getText: props.getText,
+    isItemLoaded: props.isItemLoaded,
   };
 
   return (
