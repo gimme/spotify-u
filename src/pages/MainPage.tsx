@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { getSong, getPlaylists, getUserId } from "../spotifyAPI/SpotifyAccess";
+import { getSong } from "../spotifyAPI/SpotifyAccess";
 import logo from "../logo.svg";
 import "../App.scss";
 import { Button } from "@material-ui/core";
-import VirtualizedList from "../components/VirtualizedList";
 import { makeStyles } from "@material-ui/core/styles";
 import Divider from "@material-ui/core/Divider";
-import Paper from "@material-ui/core/Paper";
 import Playlist from "../interfaces/Playlist";
+import Playlists from "../components/Playlists";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,28 +28,14 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     maxWidth: theme.spacing(40),
   },
-  playlists: {
-    minWidth: theme.spacing(22),
-    margin: theme.spacing(3),
-    backgroundColor: theme.palette.grey[900],
-  },
 }));
 
 const MainPage: React.FC = () => {
   const classes = useStyles();
   const [song, setSong] = useState<string | null>(null);
   const [playlist, setPlaylist] = useState<Playlist | null>(null);
-  const [playlists, setPlaylists] = useState<Playlist[]>([]);
 
   useEffect(() => {
-    getUserId().then((userId) => {
-      getPlaylists(50, 0).then((data) => {
-        if (!data) return;
-        setPlaylists(
-          data.items.filter((playlist) => playlist.owner.id === userId)
-        );
-      });
-    });
     setCurrentlyPlayingSong();
   }, []);
 
@@ -63,53 +48,52 @@ const MainPage: React.FC = () => {
   return (
     <div className={classes.root}>
       <div className={classes.sideBar}>
-        <Paper elevation={3} className={classes.playlists}>
-          <VirtualizedList
-            height={600}
-            itemSize={46}
-            items={playlists}
-            getText={(playlist: Playlist) => playlist.name}
-            onItemSelected={(playlist, index) => {
-              setPlaylist(playlist);
-              console.log(playlist);
-            }}
-          />
-        </Paper>
+        <Playlists
+          onPlaylistSelected={(playlist, index) => {
+            setPlaylist(playlist);
+          }}
+        />
       </div>
 
-      {playlist ? (
-        <div className={classes.app}>
+      <div className={classes.app}>
+        {playlist ? (
+          <div>
+            <div className={classes.header}>
+              {playlist ? (
+                <div>
+                  <img
+                    height={300}
+                    src={playlist.images[0].url}
+                    alt={"Playlist Cover"}
+                  />
+                  <h1>{playlist.name}</h1>
+                </div>
+              ) : (
+                <img src={logo} className="App-logo" alt="logo" />
+              )}
+              <p />
+            </div>
+
+            <Divider variant="middle" />
+
+            <div className={classes.content}>
+              <Button
+                color="primary"
+                variant="outlined"
+                onClick={setCurrentlyPlayingSong}
+              >
+                Show Current Song
+              </Button>
+
+              <h1>{song ? song : "-No song is currently playing-"}</h1>
+            </div>
+          </div>
+        ) : (
           <div className={classes.header}>
-            {playlist ? (
-              <div>
-                <img height={300} src={playlist.images[0].url} />
-                <h1>{playlist.name}</h1>
-              </div>
-            ) : (
-              <img src={logo} className="App-logo" alt="logo" />
-            )}
-            <p />
+            <h1>Select a playlist</h1>
           </div>
-
-          <Divider variant="middle" />
-
-          <div className={classes.content}>
-            <Button
-              color="primary"
-              variant="outlined"
-              onClick={setCurrentlyPlayingSong}
-            >
-              Show Current Song
-            </Button>
-
-            <h1>{song ? song : "-No song is currently playing-"}</h1>
-          </div>
-        </div>
-      ) : (
-        <div className={classes.header}>
-          <h1>Select a playlist</h1>
-        </div>
-      )}
+        )}
+      </div>
       <div className={classes.sideBar} />
     </div>
   );

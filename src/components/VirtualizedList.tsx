@@ -4,18 +4,14 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import { FixedSizeList } from "react-window";
 
-interface Item {
-  name: string;
-}
-
 interface RowProps<T> {
   index: number;
   style: React.CSSProperties | undefined;
   data: {
     selectedIndex: number;
     onItemClick: (item: T, index: number) => void;
-    items: T[];
-    getText(t: T): string;
+    items: (T | null)[];
+    getText: (t: T | null) => string;
   };
 }
 
@@ -30,7 +26,7 @@ function renderRow<T>(props: RowProps<T>) {
       key={index}
       selected={props.data.selectedIndex === index}
       onClick={() => {
-        if (props.data.onItemClick) props.data.onItemClick(item, index);
+        if (props.data.onItemClick && item) props.data.onItemClick(item, index);
       }}
     >
       <ListItemText
@@ -44,10 +40,13 @@ function renderRow<T>(props: RowProps<T>) {
 interface Props<T> {
   height: number;
   itemSize: number;
-  items: T[];
-  getText(t: T): string;
-  onItemSelected: (item: T, index: number) => void;
+  items: (T | null)[];
+  getText: (item: T | null) => string;
+  itemCount?: number;
+  onItemSelected?: (item: T, index: number) => void;
   onItemClick?: (item: T, index: number) => void;
+  onItemsRendered?: any;
+  reff?: any;
 }
 
 function VirtualizedList<T>(props: Props<T>) {
@@ -75,7 +74,9 @@ function VirtualizedList<T>(props: Props<T>) {
         height={props.height}
         width={"100%"}
         itemSize={props.itemSize}
-        itemCount={data.items.length}
+        itemCount={props.itemCount ? props.itemCount : data.items.length}
+        onItemsRendered={props.onItemsRendered}
+        ref={props.reff}
       >
         {renderRow}
       </FixedSizeList>

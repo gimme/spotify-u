@@ -1,6 +1,5 @@
 import React from "react";
 import MainPage from "./pages/MainPage";
-import TestPage from "./pages/TestPage";
 import LoadingPage from "./pages/LoadingPage";
 import {
   validateAccessToken,
@@ -25,7 +24,6 @@ function App() {
           <div className="App">
             <Switch>
               <Route path="/" exact component={MainPage} />
-              <Route path="/test" exact component={TestPage} />
               <Route path="/loading" exact component={LoadingPage} />
               <Route
                 path="/auth"
