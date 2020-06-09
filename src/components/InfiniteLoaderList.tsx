@@ -55,6 +55,7 @@ function InfiniteLoaderList<T>(props: Props<T>) {
     >
       {({ onItemsRendered, ref }) => (
         <VirtualizedList
+          isLoading={props.isNextPageLoading}
           isItemLoaded={isItemLoaded}
           onItemsRendered={onItemsRendered}
           reff={ref}

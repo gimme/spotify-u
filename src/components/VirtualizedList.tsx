@@ -15,6 +15,7 @@ interface RowProps<T> {
     onItemClick: (item: T, index: number) => void;
     items: T[];
     getText: (t: T) => string;
+    isLoading?: boolean;
     isItemLoaded?: (index: number) => boolean;
   };
 }
@@ -23,8 +24,10 @@ function renderRow<T>(props: RowProps<T>) {
   const { index, style } = props;
   const item = props.data.items[index];
 
-  const loading: boolean =
-    !!props.data.isItemLoaded && !props.data.isItemLoaded(index);
+  const loaded: boolean =
+    !props.data.isItemLoaded || props.data.isItemLoaded(index);
+
+  const loading: boolean = !!props.data.isLoading && props.data.isLoading;
 
   let content;
   if (loading) {
@@ -37,6 +40,8 @@ function renderRow<T>(props: RowProps<T>) {
         </Box>
       </ListItem>
     );
+  } else if (!loaded) {
+    content = null;
   } else {
     content = (
       <ListItem
@@ -69,6 +74,7 @@ interface Props<T> {
   onItemClick?: (item: T, index: number) => void;
   onItemsRendered?: any;
   reff?: any;
+  isLoading?: boolean;
   isItemLoaded?: (index: number) => boolean;
 }
 
@@ -88,6 +94,7 @@ function VirtualizedList<T>(props: Props<T>) {
     onItemClick: onItemClick,
     items: props.items,
     getText: props.getText,
+    isLoading: props.isLoading,
     isItemLoaded: props.isItemLoaded,
   };
 

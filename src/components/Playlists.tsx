@@ -28,58 +28,44 @@ const Playlists: React.FC<Props> = (props) => {
 
   useEffect(() => {
     getUserId().then((userId) => {
+      loadMorePlaylistsWithUserId(userId, 0);
       setUserId(userId);
     });
   }, []);
 
   const loadMorePlaylists = (index: number): Promise<any> => {
+    return loadMorePlaylistsWithUserId(userId, index);
+  };
+
+  const loadMorePlaylistsWithUserId = (
+    userId: string | null,
+    index: number
+  ): Promise<any> => {
+    if (!userId) return Promise.resolve();
+
     setIsNextPageLoading(true);
-    console.log("LOADING MORE PLAYLISTS");
+    let loadAmount = 40;
 
-    return new Promise((resolve) =>
-      setTimeout(() => {
-        setIsNextPageLoading(false);
+    return getPlaylists(loadAmount, index + skippedPlaylists).then((data) => {
+      setIsNextPageLoading(false);
 
-        if (index >= 100) {
-          setHasNextPage(false);
-          return;
-        }
-
-        let arr: Playlist[] = [];
-        for (let i = 0; i < 30; i++) {
-          arr[i] = {
-            name: "LOADED " + (index + i),
-            id: "1",
-            images: [{ height: 1, width: 1, url: "" }],
-            owner: { id: "1" },
-          };
-        }
-        setPlaylists((playlists) => playlists.concat(arr));
-
-        resolve();
-      }, 4000)
-    );
-    return Promise.resolve();
-    if (!userId) {
-      //setPlaylists((playlists) => playlists.filter((item) => !!item));
-      return Promise.resolve();
-    }
-
-    return getPlaylists(40, index + skippedPlaylists).then((data) => {
-      if (!data || data.items.length === 0) {
-        setPlaylists((playlists) => playlists.filter((item) => !!item));
+      if (!data) {
+        setHasNextPage(false);
         return;
       }
 
+      if (data.items.length < loadAmount) setHasNextPage(false);
+
+      // Filter out unowned playlists
       let filteredData = data.items.filter(
         (playlist) => playlist.owner.id === userId
       );
 
       setSkippedPlaylists(
-        skippedPlaylists + data.items.length - filteredData.length
+        skippedPlaylists + data.items.length - filteredData.length // Count unowned playlists
       );
-      setPlaylists((playlists) =>
-        playlists.filter((item) => !!item).concat(filteredData)
+      setPlaylists(
+        (playlists) => playlists.concat(filteredData) // Append loaded playlists
       );
     });
   };
