@@ -5,12 +5,20 @@ import InfiniteLoaderList from "./utils/InfiniteLoaderList";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Playlist from "../interfaces/Playlist";
+import { Divider } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: theme.spacing(22),
     margin: theme.spacing(3),
     backgroundColor: theme.palette.grey[900],
+  },
+  header: {
+    color: theme.palette.primary.main,
+    display: "flex",
+    alignItems: "center",
+    paddingLeft: theme.spacing(2),
+    height: theme.spacing(6),
   },
 }));
 
@@ -72,6 +80,10 @@ const Playlists: React.FC<Props> = (props) => {
 
   return (
     <Paper elevation={3} className={classes.root}>
+      <div className={classes.header}>
+        <h2>Playlists</h2>
+      </div>
+      <Divider />
       <InfiniteLoaderList
         hasNextPage={hasNextPage}
         isNextPageLoading={isNextPageLoading}
