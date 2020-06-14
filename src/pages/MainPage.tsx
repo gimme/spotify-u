@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getSong } from "../spotifyAPI/SpotifyAccess";
+import { getSong, getTracks } from "../spotifyAPI/SpotifyAccess";
 import logo from "../logo.svg";
 import "../App.scss";
 import { Button } from "@material-ui/core";
@@ -83,6 +83,22 @@ const MainPage: React.FC = () => {
                 onClick={setCurrentlyPlayingSong}
               >
                 Show Current Song
+              </Button>
+              <Button
+                color="primary"
+                variant="outlined"
+                onClick={() => console.log(playlist)}
+              >
+                Print Playlist
+              </Button>
+              <Button
+                color="primary"
+                variant="outlined"
+                onClick={() =>
+                  getTracks(playlist).then((data) => console.log(data))
+                }
+              >
+                Print Tracks
               </Button>
 
               <h1>{song ? song : "-No song is currently playing-"}</h1>
