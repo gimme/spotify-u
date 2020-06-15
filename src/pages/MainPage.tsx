@@ -7,6 +7,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Divider from "@material-ui/core/Divider";
 import Playlist from "../interfaces/Playlist";
 import Playlists from "../components/Playlists";
+import { findDuplicateTracks } from "../utils/PlaylistAlgorithms";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -99,6 +100,23 @@ const MainPage: React.FC = () => {
                 }
               >
                 Print Tracks
+              </Button>
+              <Button
+                color="primary"
+                variant="outlined"
+                onClick={() =>
+                  getTracks(playlist).then((data) => {
+                    if (!data) return;
+                    console.log("Duplicates:");
+                    for (let track of findDuplicateTracks(data)) {
+                      console.log(
+                        track.track.name + " - " + track.track.artists[0].name
+                      );
+                    }
+                  })
+                }
+              >
+                Print Duplicates
               </Button>
 
               <h1>{song ? song : "-No song is currently playing-"}</h1>
