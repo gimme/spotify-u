@@ -39,6 +39,7 @@ const Playlists: React.FC<Props> = (props) => {
       loadMorePlaylistsWithUserId(userId, 0);
       setUserId(userId);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadMorePlaylists = (index: number): Promise<any> => {

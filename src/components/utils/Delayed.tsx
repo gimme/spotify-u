@@ -17,7 +17,7 @@ const Delayed: React.FC<Props> = (props) => {
     return () => {
       clearTimeout(timeout);
     };
-  }, []);
+  }, [props.wait]);
 
   return hidden ? null : <>{props.children}</>;
 };
