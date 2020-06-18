@@ -6,10 +6,10 @@ import { compareTwoStrings } from "string-similarity";
  *
  * @param tracks The tracks to look through
  */
-export const findDuplicateTracks = (tracks: Track[]) => {
+export const findDuplicateTracks = (tracks: Track[]): Track[][] => {
   // Create a copy of the array sorted by artist
   let sortedTracks: (Track | null)[] = tracks.slice().sort(compareTracks);
-  let duplicates: Track[] = [];
+  let duplicates: Track[][] = [];
 
   // Loop through the whole list
   for (let i = 0; i < sortedTracks.length; i++) {
@@ -20,6 +20,8 @@ export const findDuplicateTracks = (tracks: Track[]) => {
     // Store the current song and artist
     let currentSong = currentTrack.track.name;
     let currentArtist = currentTrack.track.artists[0].name;
+    // List of duplicates of the current track
+    let currentDuplicateList = [];
 
     let isFirstDuplicate: boolean = true;
     // Loop through all subsequent tracks by the current artist
@@ -35,13 +37,16 @@ export const findDuplicateTracks = (tracks: Track[]) => {
         // Make sure the current track is added once
         if (isFirstDuplicate) {
           isFirstDuplicate = false;
-          duplicates.push(currentTrack);
+          currentDuplicateList.push(currentTrack);
         }
-        duplicates.push(t);
+        currentDuplicateList.push(t);
         // Remove track from list to avoid checking it again
         sortedTracks[j] = null;
       }
     }
+
+    // If a set of duplicates was found, add that set to the result list
+    if (currentDuplicateList.length > 0) duplicates.push(currentDuplicateList);
   }
   return duplicates;
 };
