@@ -89,6 +89,8 @@ function appendCheckLikedSongs(
 ): Promise<boolean[] | null> {
   const limit = 50;
 
+  if (tracks.length === 0) return Promise.resolve(liked);
+
   let ids = "";
   let leftoverTracks: Track[] = [];
   let count = 0;
