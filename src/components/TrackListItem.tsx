@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingRight: theme.spacing(2),
     },
     title: {
-      width: "37%",
+      width: "34%",
       minWidth: theme.spacing(20),
       paddingRight: theme.spacing(2),
     },
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingRight: theme.spacing(2),
     },
     addedAt: {
-      width: "10%",
+      width: "13%",
       minWidth: theme.spacing(13),
       paddingRight: theme.spacing(2),
     },
@@ -69,13 +69,24 @@ function formatArtists(track: Track): string {
  * @param date The date that the track was added at
  */
 function formatAddedAt(date: Date): string {
-  let minutesSince = (Date.now() - date.getTime()) / (1000 * 60);
-  let roundedMinutesSince = Math.round(minutesSince);
-  if (roundedMinutesSince === 1) return "a minute ago";
-  if (roundedMinutesSince < 60) return roundedMinutesSince + " minutes ago";
-  let roundedHoursSince = Math.round(minutesSince / 60);
-  if (roundedHoursSince === 1) return "an hour ago";
-  if (roundedHoursSince < 24) return roundedHoursSince + " hours ago";
+  let seconds = (Date.now() - date.getTime()) / 1000;
+
+  let roundedSeconds = Math.round(seconds);
+  if (roundedSeconds === 0) return "just now";
+  if (roundedSeconds === 1) return "a second ago";
+  if (roundedSeconds < 60) return roundedSeconds + " seconds ago";
+
+  let roundedMinutes = Math.round(seconds / 60);
+  if (roundedMinutes === 1) return "a minute ago";
+  if (roundedMinutes < 60) return roundedMinutes + " minutes ago";
+
+  let roundedHours = Math.round(seconds / (60 * 60));
+  if (roundedHours === 1) return "an hour ago";
+  if (roundedHours < 24) return roundedHours + " hours ago";
+
+  let roundedDays = Math.round(seconds / (60 * 60 * 24));
+  if (roundedDays === 1) return "a day ago";
+  if (roundedDays < 16) return roundedDays + " days ago";
 
   return (
     date.getFullYear() +
