@@ -23,6 +23,13 @@ export const getSong = (): Promise<string | null> => {
   });
 };
 
+export const getPlaylist = (playlistId: string): Promise<Playlist | null> => {
+  return fetchFromSpotifyAPI(`playlists/${playlistId}`).then((data) => {
+    if (!data) return null;
+    return data;
+  });
+};
+
 /**
  * Returns all tracks from the specified playlist.
  *
@@ -44,7 +51,7 @@ function appendTracksFromOffset(
   offset: number,
   tracks: Track[]
 ): Promise<Track[] | null> {
-  let limit = 100;
+  const limit = 100;
 
   return fetchFromSpotifyAPI(`playlists/${playlist.id}/tracks`, {
     limit: limit,
@@ -58,6 +65,94 @@ function appendTracksFromOffset(
     return appendTracksFromOffset(playlist, offset + limit, tracks);
   });
 }
+
+/**
+ * Returns a list of booleans representing if each track is liked by the user.
+ *
+ * @param tracks The tracks to check if liked
+ */
+export const checkLikedTracks = (
+  tracks: Track[]
+): Promise<boolean[] | null> => {
+  return appendCheckLikedSongs([], tracks);
+};
+
+/**
+ * Appends liked track check results to the specified liked array.
+ *
+ * @param liked The array to append the results to
+ * @param tracks The tracks to check
+ */
+function appendCheckLikedSongs(
+  liked: boolean[],
+  tracks: Track[]
+): Promise<boolean[] | null> {
+  const limit = 50;
+
+  let ids = "";
+  let leftoverTracks: Track[] = [];
+  let count = 0;
+  for (const track of tracks) {
+    if (count < limit) {
+      if (ids.length !== 0) ids = ids + ",";
+      ids = ids + track.track.id;
+    } else leftoverTracks.push(track);
+    count++;
+  }
+
+  return fetchFromSpotifyAPI("me/tracks/contains", {
+    ids: ids,
+  }).then((data: boolean[] | null) => {
+    if (!data) return null;
+
+    liked = liked.concat(data);
+
+    if (leftoverTracks.length === 0) return Promise.resolve(liked);
+    return appendCheckLikedSongs(liked, leftoverTracks);
+  });
+}
+
+export const removeSongsFromPlaylist = (
+  playlist: Playlist,
+  tracksToRemove: Track[],
+  snapshotId: string
+): Promise<boolean> => {
+  const limit = 1;
+  let tracks = [];
+
+  let leftoverTracks: Track[] = [];
+  let count = 0;
+  for (const track of tracksToRemove) {
+    count++;
+    if (count > limit) {
+      leftoverTracks.push(track);
+      continue;
+    }
+    if (!track.position) {
+      console.error("Missing track position");
+      continue;
+    }
+
+    tracks.push({
+      uri: track.track.uri,
+      positions: [track.position],
+    });
+  }
+
+  return fetchFromSpotifyAPI(
+    `playlists/${playlist.id}/tracks`,
+    undefined,
+    "DELETE",
+    {
+      tracks: tracks,
+      snapshot_id: snapshotId,
+    }
+  ).then((data) => {
+    if (!data) return false;
+    if (leftoverTracks.length === 0) return true;
+    return removeSongsFromPlaylist(playlist, leftoverTracks, data.snapshot_id);
+  });
+};
 
 /**
  * The response data when fetching tracks.
@@ -89,7 +184,9 @@ export const getPlaylists = (
 
 function fetchFromSpotifyAPI(
   path: string,
-  queryParams?: object
+  queryParams?: object,
+  method?: "GET" | "POST" | "DELETE",
+  body?: object
 ): Promise<any | null> {
   let promise = fetchAccessToken();
   if (promise === null) return Promise.resolve(null);
@@ -101,7 +198,12 @@ function fetchFromSpotifyAPI(
           path +
           (queryParams ? "?" + queryString.stringify(queryParams) : ""),
         {
-          headers: { Authorization: "Bearer " + accessToken },
+          headers: {
+            Authorization: "Bearer " + accessToken,
+            "Content-Type": "application/json",
+          },
+          method: method,
+          body: JSON.stringify(body),
         }
       );
     })
