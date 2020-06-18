@@ -117,7 +117,7 @@ export const removeSongsFromPlaylist = (
   tracksToRemove: Track[],
   snapshotId: string
 ): Promise<boolean> => {
-  const limit = 1;
+  const limit = 100;
   let tracks = [];
 
   let leftoverTracks: Track[] = [];
