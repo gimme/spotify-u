@@ -145,14 +145,6 @@ const MainPage: React.FC = () => {
             <Divider variant="middle" />
 
             <div className={classes.content}>
-              <Button
-                color="primary"
-                variant="outlined"
-                className={classes.button}
-                onClick={setCurrentlyPlayingSong}
-              >
-                Show Current Song
-              </Button>
               <LoadingButton
                 color="primary"
                 variant="contained"
@@ -166,19 +158,9 @@ const MainPage: React.FC = () => {
                 color="primary"
                 variant="outlined"
                 className={classes.button}
-                onClick={() => console.log(playlist)}
+                onClick={setCurrentlyPlayingSong}
               >
-                Print Playlist
-              </Button>
-              <Button
-                color="primary"
-                variant="outlined"
-                className={classes.button}
-                onClick={() =>
-                  getTracks(playlist).then((data) => console.log(data))
-                }
-              >
-                Print Tracks
+                Show Current Song
               </Button>
 
               <h1>{song ? song : "-No song is currently playing-"}</h1>
