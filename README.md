@@ -1,4 +1,4 @@
-https://gimme0.github.io/spotify-u
+https://gimme.github.io/spotify-u
 
 ##
 
